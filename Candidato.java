@@ -18,4 +18,5 @@ public class Candidato {
     public void agregarVoto() {
         this.votos++;
     }
+    //añade un voto al votante escogido
 };

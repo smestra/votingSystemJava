@@ -7,9 +7,9 @@ import java.util.ArrayList;
 public class VentanaVotacion extends JFrame {
     private SistemaVotacion sistema;
     private JTextField txtId;
-    private JButton btnVotar;
+    private final JButton btnVotar;
     private JComboBox<String> comboCandidatos;
-    private JButton btnResultados;
+    private final JButton btnResultados;
 
     public VentanaVotacion() {
         sistema = new SistemaVotacion();
@@ -17,25 +17,21 @@ public class VentanaVotacion extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
-
         txtId = new JTextField(15);
         btnVotar = new JButton("Votar");
-        comboCandidatos = new JComboBox<>(new String[]{"Candidato 1", "Candidato 2", "Candidato 3"});
+        comboCandidatos = new JComboBox<>(new String[] { "Candidato 1", "Candidato 2", "Candidato 3", "Candidato 4" });
         btnResultados = new JButton("Mostrar Resultados");
-
         add(new JLabel("ID Votante:"));
         add(txtId);
         add(new JLabel("Seleccione un candidato:"));
         add(comboCandidatos);
         add(btnVotar);
         add(btnResultados);
-
         btnVotar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String id = txtId.getText();
                 int candidatoIndex = comboCandidatos.getSelectedIndex();
-
                 if (sistema.autenticarVotante(id)) {
                     sistema.votar(id, candidatoIndex);
                     JOptionPane.showMessageDialog(null, "Voto registrado con éxito.");
@@ -44,7 +40,6 @@ public class VentanaVotacion extends JFrame {
                 }
             }
         });
-
         btnResultados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,7 +65,7 @@ public class VentanaVotacion extends JFrame {
 }
 
 class PanelGrafico extends JPanel {
-    private ArrayList<Candidato> candidatos;
+    private final ArrayList<Candidato> candidatos;
 
     public PanelGrafico(ArrayList<Candidato> candidatos) {
         this.candidatos = candidatos;
@@ -79,26 +74,26 @@ class PanelGrafico extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int totalVotos = candidatos.stream().mapToInt(Candidato::getVotos).sum();
-        int startAngle = 0;
-
-        for (Candidato candidato : candidatos) {
-            int angle = (int) Math.round((double) candidato.getVotos() / totalVotos * 360);
-            g.setColor(Color.getHSBColor((float) startAngle / 360, 1f, 1f)); // Color diferente para cada sección
-            g.fillArc(50, 50, 300, 300, startAngle, angle);
-
-            // Calcular la posición del texto
-            int textAngle = startAngle + angle / 2;
-            int x = (int) (200 + 100 * Math.cos(Math.toRadians(textAngle)));
-            int y = (int) (200 + 100 * Math.sin(Math.toRadians(textAngle)));
-
-            g.setColor(Color.BLACK);
-            g.drawString(candidato.getNombre() + " (" + candidato.getVotos() + " votos)", x, y);
-
-            startAngle += angle;
+        int width = getWidth();
+        int height = getHeight();
+        int barWidth = width / candidatos.size();
+        int maxVotos = candidatos.stream().mapToInt(Candidato::getVotos).max().orElse(1);
+        for (int i = 0; i < candidatos.size(); i++) {
+            Candidato candidato = candidatos.get(i);
+            int barHeight = (int) ((double) candidato.getVotos() / maxVotos * (height - 50));
+            int x = i * barWidth;
+            int y = height - barHeight - 30;
+            g.setColor(Color.getHSBColor((float) i / candidatos.size(), 1f, 1f));
+            g.fillRect(x, y, barWidth - 30, barHeight - 20);
+            g.setColor(Color.BLUE);
+            g.drawString(candidato.getNombre(),
+                    x + (barWidth - 10) / 2 - g.getFontMetrics().stringWidth(candidato.getNombre()) / 2, height - 10);
+            g.drawString(String.valueOf(candidato.getVotos()),
+                    x + (barWidth - 10) / 2 - g.getFontMetrics().stringWidth(String.valueOf(candidato.getVotos())) / 2,
+                    y - 10);
         }
-
         g.setColor(Color.BLACK);
-        g.drawString("Resultados de la Votación", 150, 20);
+        g.drawString("Resultados de la Votación",
+                width / 2 - g.getFontMetrics().stringWidth("Resultados de la Votación") / 2, 20);
     }
-};
+}

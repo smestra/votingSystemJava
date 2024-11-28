@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class SistemaVotacion {
+
     private ArrayList<Candidato> candidatos;
     private ArrayList<Votante> votantes;
 
@@ -10,15 +11,16 @@ public class SistemaVotacion {
         candidatos.add(new Candidato("Candidato 1"));
         candidatos.add(new Candidato("Candidato 2"));
         candidatos.add(new Candidato("Candidato 3"));
+        candidatos.add(new Candidato("Candidato 4"));
     }
 
     public boolean autenticarVotante(String id) {
         for (Votante votante : votantes) {
             if (votante.getId().equals(id)) {
-                return false; // Votante ya registrado
+                return false;
             }
         }
-        votantes.add(new Votante(id)); // Agregar nuevo votante
+        votantes.add(new Votante(id));
         return true;
     }
 

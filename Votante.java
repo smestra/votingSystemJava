@@ -1,6 +1,9 @@
 public class Votante {
+
+    // Atributo de la clase Votante.
     private String id;
 
+    // Constructor de la clase Votante.
     public Votante(String id) {
         this.id = id;
     }
@@ -8,4 +11,4 @@ public class Votante {
     public String getId() {
         return id;
     }
-}
+};
