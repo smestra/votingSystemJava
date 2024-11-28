@@ -13,7 +13,7 @@ public class VentanaVotacion extends JFrame {
 
     public VentanaVotacion() {
         sistema = new SistemaVotacion();
-        setTitle("Sistema de Votación");
+        setTitle("Sistema de votación");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
@@ -21,9 +21,9 @@ public class VentanaVotacion extends JFrame {
         btnVotar = new JButton("Votar");
         comboCandidatos = new JComboBox<>(new String[] { "Candidato 1", "Candidato 2", "Candidato 3", "Candidato 4" });
         btnResultados = new JButton("Mostrar Resultados");
-        add(new JLabel("ID Votante:"));
+        add(new JLabel("Ingrese su numero de cédula:"));
         add(txtId);
-        add(new JLabel("Seleccione un candidato:"));
+        add(new JLabel("Seleccione su candidato:"));
         add(comboCandidatos);
         add(btnVotar);
         add(btnResultados);
@@ -36,7 +36,7 @@ public class VentanaVotacion extends JFrame {
                     sistema.votar(id, candidatoIndex);
                     JOptionPane.showMessageDialog(null, "Voto registrado con éxito.");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Ya has votado.");
+                    JOptionPane.showMessageDialog(null, "Solo se puede votar una vez.");
                 }
             }
         });
